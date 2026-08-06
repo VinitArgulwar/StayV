@@ -1,0 +1,46 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="row mt-4 mb-5 justify-content-center">
+    <div class="col-lg-5 col-md-8 col-sm-10 col-12">
+        <div class="form-card signup-card">
+            <!-- Decorative Accent Header -->
+            <div class="signup-header-accent"></div>
+            
+            <div class="text-center mb-4 mt-2">
+                <i class="fa-brands fa-airbnb signup-logo-icon"></i>
+                <h2 class="fw-bold mt-2 mb-1">Login</h2>
+                <p class="text-muted signup-subtext">Join StayV to explore and share beautiful places</p>
+            </div>
+            
+            <form action="/login" method="POST" novalidate class="needs-validation">
+                <!-- Username -->
+                <div class="mb-3">
+                    <label for="username" class="form-label-custom">Username</label>
+                    <div class="input-group-custom">
+                        <span class="input-icon"><i class="fa-solid fa-user"></i></span>
+                        <input name="username" type="text" class="form-control-custom" id="username" placeholder="e.g. wanderer44" required>
+                        <div class="invalid-feedback">Please choose a username.</div>
+                    </div>
+                </div>
+
+                
+                <!-- Password -->
+                <div class="mb-4">
+                    <label for="password" class="form-label-custom">Password</label>
+                    <div class="input-group-custom">
+                        <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                        <input name="password" type="password" class="form-control-custom" id="password" placeholder="••••••••" required>
+                        <div class="invalid-feedback">Please enter a secure password.</div>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button class="btn btn-brand py-2 btn-lg" type="submit">Login</button>
+                    <a href="/listings" class="btn-link-back text-center mt-2 text-decoration-none">
+                        <i class="fa-solid fa-arrow-left me-1"></i> Back to Explore
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

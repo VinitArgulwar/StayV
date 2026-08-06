@@ -1,0 +1,100 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="row mt-4">
+    <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12">
+        <h2 class="show-title"><%= listing.title %></h2>
+    </div>
+    
+    <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12">
+        <div class="card show-card">
+            <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing image" onerror="this.src='https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60';">
+            
+            <div class="card-body show-body">
+                <p class="owner-info">Hosted by a StayV Host</p>
+                
+                <p class="show-desc"><%= listing.description %></p>
+                
+                <div class="show-meta-item">
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
+                    <span><b>&#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : 'N/A' %></b> night</span>
+                </div>
+                
+                <div class="show-meta-item">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span><%= listing.location %></span>
+                </div>
+                
+                <div class="show-meta-item">
+                    <i class="fa-solid fa-globe"></i>
+                    <span><%= listing.country %></span>
+                </div>
+            </div>
+        </div>
+<% if (currentUser && listing.owner && currentUser._id.equals(listing.owner._id)) { %>        <div class="d-flex gap-3 mt-3 mb-5">
+            <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark-custom px-4">Edit Listing</a>
+            <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST" class="d-inline">
+                <button type="submit" class="btn btn-delete px-4">Delete Listing</button>
+            </form>
+        </div>
+    <%}%>
+    </div>
+</div>
+
+<div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12">
+    <%if(currentUser){ %>
+    <h4>Leave a Review</h4>
+    <hr>
+
+    <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
+
+    <label for="body">Review</label>
+<textarea
+    name="review[body]"
+    id="body"
+    class="form-control mb-3"
+    rows="3"
+    required
+></textarea>
+    <div class="invalid-feedback">Please enter a review.</div>
+    <label for="rating">Rating</label>
+    <select
+        name="review[rating]"
+        id="rating"
+        class="form-select mb-3"
+        required
+    >
+        <option value="5">5 (Excellent)</option>
+        <option value="4">4 (Very Good)</option>
+        <option value="3">3 (Good)</option>
+        <option value="2">2 (Fair)</option>
+        <option value="1">1 (Poor)</option>
+    </select>
+
+    <button class="btn btn-brand">Submit Review</button>
+</form>
+<%}%>
+<hr>
+<h4>Reviews</h4>
+    <hr>
+    <% if (listing.reviews.length === 0) { %>
+        <p>No reviews yet. Be the first to leave a review!</p>
+    <% } else { %>
+        <% listing.reviews.forEach(review => { %>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p><strong>Author:</strong> <%= review.author.username %></p>
+                    <p><strong>Rating:</strong> <%= review.rating %> / 5</p>
+                    <p><strong>Review:</strong> <%= review.body %></p>
+                </div>
+                <%if(currentUser && review.author && currentUser._id.equals(review.author._id)) { %>    
+                <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-delete">Delete Review</button>
+                </form>
+                <% } %>
+            </div>
+
+        <% }) %>
+    <% } %>
+
+</div>
+

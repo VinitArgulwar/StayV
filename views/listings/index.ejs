@@ -1,0 +1,115 @@
+<% layout('layouts/boilerplate') %>
+
+<%
+function getCategory(listing) {
+    const title = (listing.title || "").toLowerCase();
+    const desc = (listing.description || "").toLowerCase();
+    
+    if (title.includes("camp") || title.includes("tent") || title.includes("glamp") || desc.includes("camp") || desc.includes("tent")) {
+        return "Camping";
+    }
+    if (title.includes("pool") || title.includes("swim") || title.includes("beach") || title.includes("lake") || title.includes("ocean") || title.includes("sea") || desc.includes("pool") || desc.includes("beach") || desc.includes("lake")) {
+        return "Amazing Pools";
+    }
+    if (title.includes("castle") || title.includes("fort") || title.includes("palace") || title.includes("villa") || title.includes("historic") || title.includes("heritage") || title.includes("mansion") || desc.includes("castle") || desc.includes("villa")) {
+        return "Castles";
+    }
+    if (title.includes("mountain") || title.includes("cabin") || title.includes("alpine") || title.includes("hill") || title.includes("peak") || title.includes("retreat") || desc.includes("mountain") || desc.includes("cabin")) {
+        return "Mountains";
+    }
+    if (title.includes("boat") || title.includes("ship") || title.includes("houseboat") || title.includes("yacht") || desc.includes("boat") || desc.includes("houseboat")) {
+        return "Boats";
+    }
+    if (title.includes("farm") || title.includes("barn") || title.includes("ranch") || title.includes("vineyard") || desc.includes("farm") || desc.includes("vineyard")) {
+        return "Farms";
+    }
+    if (title.includes("arctic") || title.includes("ice") || title.includes("glacier") || title.includes("winter") || desc.includes("arctic") || desc.includes("glacier")) {
+        return "Arctic";
+    }
+    if (title.includes("dome") || title.includes("geodesic") || title.includes("bubble") || desc.includes("dome")) {
+        return "Domes";
+    }
+    if (title.includes("room") || title.includes("loft") || title.includes("apartment") || title.includes("studio") || title.includes("condo") || title.includes("suite") || title.includes("cozy") || desc.includes("loft") || desc.includes("apartment")) {
+        return "Rooms";
+    }
+    if (title.includes("city") || title.includes("downtown") || title.includes("urban") || title.includes("town") || desc.includes("city") || desc.includes("downtown")) {
+        return "Iconic Cities";
+    }
+    return "Trending";
+}
+%>
+
+<div class="filters-container">
+    <div class="filters">
+        <div class="filter" data-category="Trending">
+            <div><i class="fa-solid fa-fire"></i></div>
+            <p>Trending</p>
+        </div>
+        <div class="filter" data-category="Rooms">
+            <div><i class="fa-solid fa-bed"></i></div>
+            <p>Rooms</p>
+        </div>
+        <div class="filter" data-category="Iconic Cities">
+            <div><i class="fa-solid fa-mountain-city"></i></div>
+            <p>Iconic Cities</p>
+        </div>
+        <div class="filter" data-category="Mountains">
+            <div><i class="fa-solid fa-mountain"></i></div>
+            <p>Mountains</p>
+        </div>
+        <div class="filter" data-category="Castles">
+            <div><i class="fa-brands fa-fort-awesome"></i></div>
+            <p>Castles</p>
+        </div>
+        <div class="filter" data-category="Amazing Pools">
+            <div><i class="fa-solid fa-person-swimming"></i></div>
+            <p>Amazing Pools</p>
+        </div>
+        <div class="filter" data-category="Camping">
+            <div><i class="fa-solid fa-tent"></i></div>
+            <p>Camping</p>
+        </div>
+        <div class="filter" data-category="Farms">
+            <div><i class="fa-solid fa-cow"></i></div>
+            <p>Farms</p>
+        </div>
+        <div class="filter" data-category="Arctic">
+            <div><i class="fa-solid fa-snowflake"></i></div>
+            <p>Arctic</p>
+        </div>
+        <div class="filter" data-category="Domes">
+            <div><i class="fa-solid fa-igloo"></i></div>
+            <p>Domes</p>
+        </div>
+        <div class="filter" data-category="Boats">
+            <div><i class="fa-solid fa-ship"></i></div>
+            <p>Boats</p>
+        </div>
+    </div>
+
+    <div class="tax-toggle">
+        <div class="form-check form-switch form-check-reverse">
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+            <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
+        </div>
+    </div>
+</div>
+
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-1 mt-3">
+    <% for(let listing of alllistings) { %> 
+        <div class="col listing-card-wrapper" data-category="<%= getCategory(listing) %>">
+            <a href="/listings/<%= listing._id %>" class="card-link">
+                <div class="card listing-card">
+                    <img src="<%= listing.image.url %>" class="card-img-top listing-img" alt="listing image" onerror="this.src='https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60';">
+                    <div class="card-body">
+                        <p class="card-title"><%= listing.title %></p>
+                        <p class="card-location"><%= listing.location %>, <%= listing.country %></p>
+                        <p class="card-price">&#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : 'N/A' %> <span>night</span><span class="tax-info"> &nbsp;+18% GST</span></p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    <% } %>
+</div>
+
+

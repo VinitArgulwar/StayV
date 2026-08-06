@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/"><i class="fa-brands fa-airbnb"></i></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav me-auto">
+    
+        <a class="nav-link" href="/listings">Explore</a>
+      </div>
+      
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/listings/new">Add Listing</a>
+        <%if(!currentUser){ %>
+          <a class="nav-link" href="/login"><B>Login</B></a>
+          <a class="nav-link" href="/signup"><B>Sign Up</B></a>
+        <% } else { %>
+    
+          <a class="nav-link" href="/logout"><B>Logout</B></a>
+        <% } %>
+        
+      </div>
+    </div>
+  </div>
+</nav>

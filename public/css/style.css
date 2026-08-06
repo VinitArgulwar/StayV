@@ -1,0 +1,683 @@
+/* Custom Airbnb styling for StayV app */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --brand-color: #ff385c;
+    --brand-hover: #e61e4d;
+    --text-primary: #222222;
+    --text-secondary: #717171;
+    --border-color: #dddddd;
+    --bg-light: #f7f7f7;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    color: var(--text-primary);
+    background-color: #ffffff;
+}
+
+/* Container & Layout */
+.container {
+    flex: 1;
+}
+
+/* Navbar */
+.navbar {
+    height: 5rem;
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #ebebeb;
+    padding: 0.5rem 2rem;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.fa-airbnb {
+    color: var(--brand-color);
+    font-size: 2.2rem;
+}
+
+.nav-link {
+    color: var(--text-primary) !important;
+    font-weight: 500;
+    font-size: 0.95rem;
+    margin: 0 0.5rem;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+    color: var(--brand-color) !important;
+}
+
+/* Footer (Airbnb Style) */
+footer {
+    background-color: var(--bg-light);
+    border-top: 1px solid #ebebeb;
+    padding: 2.5rem 0;
+    margin-top: auto;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ebebeb;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.footer-brand {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.footer-brand span {
+    color: var(--brand-color);
+}
+
+.footer-socials a {
+    color: var(--text-primary);
+    margin-left: 1.5rem;
+    font-size: 1.25rem;
+    transition: color 0.2s ease;
+}
+
+.footer-socials a:hover {
+    color: var(--brand-color);
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.footer-links li {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.footer-links li:not(:last-child)::after {
+    content: "·";
+    margin: 0 0.5rem;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
+}
+
+.footer-copy {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* Listing Grid & Cards */
+.listing-card {
+    border: none !important;
+    background-color: transparent !important;
+    transition: transform 0.2s ease;
+}
+
+.listing-img {
+    height: 18rem;
+    object-fit: cover;
+    border-radius: 0.75rem !important;
+    width: 100%;
+    transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.card-link {
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+.card-link:hover .listing-img {
+    filter: brightness(0.92);
+    transform: scale(1.01);
+}
+
+.card-body {
+    padding: 0.75rem 0.25rem 0.25rem 0.25rem !important;
+}
+
+.card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-location {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.2rem;
+}
+
+.card-price {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.card-price span {
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+/* Detail Show Page */
+.show-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+.show-card {
+    border: none !important;
+    background-color: transparent !important;
+}
+
+.show-img {
+    height: 28rem;
+    object-fit: cover;
+    border-radius: 1rem !important;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.show-body {
+    padding: 1.5rem 0 !important;
+}
+
+.owner-info {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #ebebeb;
+    padding-bottom: 1rem;
+}
+
+.show-desc {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.show-meta-item {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.show-meta-item i {
+    color: var(--brand-color);
+    width: 1.5rem;
+    font-size: 1.1rem;
+}
+
+.show-price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-top: 1.5rem;
+}
+
+/* Forms & Inputs styling */
+.form-card {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 2rem;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-control, .form-select {
+    border-radius: 0.5rem !important;
+    border: 1px solid var(--border-color) !important;
+    padding: 0.65rem 0.75rem !important;
+    font-size: 0.95rem !important;
+    color: var(--text-primary) !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--brand-color) !important;
+    box-shadow: 0 0 0 3px rgba(255, 56, 92, 0.15) !important;
+    outline: none !important;
+}
+
+/* Buttons */
+.btn-brand {
+    background-color: var(--brand-color) !important;
+    border-color: var(--brand-color) !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    border-radius: 0.5rem !important;
+    padding: 0.65rem 1.5rem !important;
+    transition: background-color 0.2s ease, transform 0.1s ease !important;
+}
+
+.btn-brand:hover {
+    background-color: var(--brand-hover) !important;
+    border-color: var(--brand-hover) !important;
+}
+
+.btn-brand:active {
+    transform: scale(0.98);
+}
+
+.btn-dark-custom {
+    background-color: #222222 !important;
+    border-color: #222222 !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    border-radius: 0.5rem !important;
+    padding: 0.65rem 1.5rem !important;
+}
+
+.btn-dark-custom:hover {
+    background-color: #000000 !important;
+    border-color: #000000 !important;
+}
+
+.btn-delete {
+    background-color: #ffffff !important;
+    border: 1px solid #222222 !important;
+    color: #222222 !important;
+    font-weight: 600 !important;
+    border-radius: 0.5rem !important;
+    padding: 0.65rem 1.5rem !important;
+    transition: all 0.2s ease !important;
+}
+
+.btn-delete:hover {
+    background-color: #f7f7f7 !important;
+    color: #000000 !important;
+}
+
+/* Navbar Custom Sign Up Button & Welcome styles */
+.btn-signup-nav {
+    background-color: var(--brand-color) !important;
+    color: #ffffff !important;
+    border-radius: 20px !important;
+    padding: 0.4rem 1.25rem !important;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    box-shadow: 0 4px 10px rgba(255, 56, 92, 0.2);
+    transition: all 0.3s ease !important;
+}
+
+.btn-signup-nav:hover {
+    background-color: var(--brand-hover) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(255, 56, 92, 0.3);
+}
+
+.nav-user-welcome {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-primary) !important;
+}
+
+.text-brand {
+    color: var(--brand-color);
+}
+
+/* Premium Flash Notification Alerts */
+.custom-flash-alert {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 1.15rem 3rem 1.15rem 1.5rem;
+    border-radius: 14px;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.02);
+    backdrop-filter: blur(10px);
+    animation: flashSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.3s ease;
+}
+
+@keyframes flashSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.98);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.custom-flash-alert.success {
+    background: linear-gradient(135deg, rgba(230, 246, 236, 0.9) 0%, rgba(212, 240, 222, 0.9) 100%);
+    color: #1a5c37;
+    border-left: 6px solid #2ecc71;
+}
+
+.custom-flash-alert.error {
+    background: linear-gradient(135deg, rgba(253, 237, 237, 0.9) 0%, rgba(251, 219, 219, 0.9) 100%);
+    color: #7f2626;
+    border-left: 6px solid #e74c3c;
+}
+
+.flash-icon-wrapper {
+    font-size: 1.35rem;
+    margin-right: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-flash-alert.success .flash-icon-wrapper {
+    color: #2ecc71;
+}
+
+.custom-flash-alert.error .flash-icon-wrapper {
+    color: #e74c3c;
+}
+
+.flash-content {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.btn-close-custom {
+    position: absolute;
+    top: 50%;
+    right: 1.25rem;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-size: 1.1rem;
+    opacity: 0.6;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.btn-close-custom:hover {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Premium Signup Page styling */
+.signup-card {
+    position: relative;
+    overflow: hidden;
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 1.25rem;
+    padding: 2.5rem 2rem;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.06), 0 5px 15px rgba(0,0,0,0.02);
+}
+
+.signup-header-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--brand-color) 0%, #ff6b8b 100%);
+}
+
+.signup-logo-icon {
+    font-size: 3rem;
+    color: var(--brand-color);
+}
+
+.signup-subtext {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-label-custom {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.5px;
+}
+
+/* Custom styled input groups with prefix icons */
+.input-group-custom {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    pointer-events: none;
+    z-index: 10;
+    transition: color 0.2s ease;
+}
+
+.form-control-custom {
+    width: 100%;
+    border-radius: 0.75rem !important;
+    border: 1px solid var(--border-color) !important;
+    padding: 0.75rem 1rem 0.75rem 2.75rem !important;
+    font-size: 0.95rem !important;
+    color: var(--text-primary) !important;
+    background-color: #ffffff !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease !important;
+}
+
+.form-control-custom::placeholder {
+    color: #b0b0b0;
+}
+
+.form-control-custom:focus {
+    border-color: var(--brand-color) !important;
+    box-shadow: 0 0 0 4px rgba(255, 56, 92, 0.12) !important;
+    outline: none !important;
+    background-color: #fff !important;
+}
+
+.input-group-custom:focus-within .input-icon {
+    color: var(--brand-color);
+}
+
+.btn-link-back {
+    color: var(--text-secondary) !important;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: color 0.2s ease !important;
+}
+
+.btn-link-back:hover {
+    color: var(--text-primary) !important;
+}
+
+.preview-img {
+    width: 200px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Filters Section */
+.filters-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 0.5rem 0;
+}
+
+.filters {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    align-items: center;
+    gap: 2rem;
+    flex-grow: 1;
+    min-width: 0; /* Prevents stretching parent and pushing tax toggle off-screen */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.filters::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+}
+
+.filter {
+    text-align: center;
+    margin-top: 1rem;
+    opacity: 0.7;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border-bottom: 2px solid transparent;
+    padding-bottom: 0.5rem;
+    flex: 0 0 auto;
+}
+
+.filter:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+    border-bottom-color: var(--text-secondary);
+}
+
+.filter.active-filter {
+    opacity: 1;
+    font-weight: 600;
+    border-bottom: 2px solid var(--brand-color);
+}
+
+.filter.active-filter i {
+    color: var(--brand-color);
+}
+
+.filter i {
+    font-size: 1.4rem;
+    display: block;
+    margin-bottom: 0.35rem;
+    transition: color 0.2s ease;
+}
+
+.filter p {
+    font-size: 0.75rem;
+    margin: 0;
+}
+
+/* Tax Toggle Switch styling */
+.tax-toggle {
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    height: 3.25rem;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.tax-toggle:hover {
+    border-color: var(--text-secondary);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
+}
+
+.tax-toggle .form-check-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    margin-right: 0.75rem;
+}
+
+.tax-toggle .form-check-input {
+    cursor: pointer;
+    width: 2.75rem;
+    height: 1.5rem;
+    background-color: #e0e0e0;
+    border-color: transparent;
+    transition: background-color 0.2s ease;
+}
+
+.tax-toggle .form-check-input:focus {
+    box-shadow: none;
+    border-color: transparent;
+}
+
+.tax-toggle .form-check-input:checked {
+    background-color: var(--brand-color);
+    border-color: var(--brand-color);
+}
+
+/* Tax Info display state */
+.tax-info {
+    display: none;
+    color: var(--brand-color);
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: opacity 0.3s ease;
+}
+
+/* Card filter animations */
+.listing-card-wrapper {
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.listing-card-wrapper.hide-card {
+    display: none !important;
+}
