@@ -133,18 +133,7 @@ http://localhost:8080
 
 ---
 
-## 📸 Screenshots
 
-You can add screenshots of:
-
-* Home Page
-* Listing Details
-* Login Page
-* Signup Page
-* Create Listing
-* Edit Listing
-
----
 
 ## 🎯 Future Improvements
 
