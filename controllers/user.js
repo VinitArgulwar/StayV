@@ -2,33 +2,11 @@ const Listing = require("../models/listing");
 const Review = require("../models/review");
 const ExpressError = require("../utils/ExpressError");
 const User=require("../models/users");
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 const Otp = require("../models/otpschema");
 const bcrypt = require("bcrypt");   
 
-
-const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    requireTLS: true,
-    family: 4,
-    auth: {
-        user: process.env.GOOGLE_USER,
-        pass: process.env.GOOGLE_PASS,
-    },
-    tls: {
-        rejectUnauthorized: false,
-    },
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 10000,
-});
-
-// Verify transporter on startup
-transporter.verify()
-    .then(() => console.log("SMTP transporter is ready"))
-    .catch((err) => console.error("SMTP transporter error:", err.message));
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 module.exports.signup=async (req, res, next) => {
     try {
@@ -105,9 +83,8 @@ module.exports.sendOtp = async (req, res) => {
             return res.redirect("/signup");
         }
 
-        // Check if email credentials are configured
-        if (!process.env.GOOGLE_USER || !process.env.GOOGLE_PASS) {
-            console.error("GOOGLE_USER or GOOGLE_PASS environment variables are not set!");
+        if (!process.env.RESEND_API_KEY) {
+            console.error("RESEND_API_KEY environment variable is not set!");
             req.flash("error", "Email service is not configured. Please contact the admin.");
             return res.redirect("/signup");
         }
@@ -128,23 +105,26 @@ module.exports.sendOtp = async (req, res) => {
         const newOtp = new Otp({ email, otp: hashotp });
         await newOtp.save();
 
-        // Send email with a hard timeout to prevent hanging
-        const sendMailPromise = transporter.sendMail({
-            from: `"StayV" <${process.env.GOOGLE_USER}>`,
+        // Send email via Resend (HTTP-based, works on Render free)
+        const { error } = await resend.emails.send({
+            from: "StayV <onboarding@resend.dev>",
             to: email,
-            subject: "OTP Verification",
-            text: "Your OTP is: " + otp,
-            html: "<b>Your OTP is: " + otp + "</b>",
+            subject: "OTP Verification - StayV",
+            html: `<div style="font-family:sans-serif;padding:20px;">
+                <h2>StayV - Email Verification</h2>
+                <p>Your OTP is:</p>
+                <h1 style="letter-spacing:8px;color:#FF385C;">${otp}</h1>
+                <p>This code expires in 5 minutes.</p>
+            </div>`,
         });
 
-        const timeoutPromise = new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("Email sending timed out")), 15000)
-        );
-
-        await Promise.race([sendMailPromise, timeoutPromise]);
+        if (error) {
+            console.error("Resend error:", error);
+            req.flash("error", "Failed to send OTP. Please try again.");
+            return res.redirect("/signup");
+        }
 
         req.flash("success", "OTP sent to your email. Please check your inbox.");
-        // Explicitly save session before redirect to prevent data loss
         req.session.save((err) => {
             if (err) {
                 console.error("Session save error:", err);

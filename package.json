@@ -32,6 +32,7 @@
     "nodemailer": "^9.0.5",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^9.1.0"
+    "passport-local-mongoose": "^9.1.0",
+    "resend": "^6.24.0"
   }
 }
