@@ -2,11 +2,17 @@ const Listing = require("../models/listing");
 const Review = require("../models/review");
 const ExpressError = require("../utils/ExpressError");
 const User=require("../models/users");
-const { Resend } = require("resend");
+const nodemailer = require("nodemailer");
 const Otp = require("../models/otpschema");
 const bcrypt = require("bcrypt");   
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD,
+    },
+});
 
 module.exports.signup=async (req, res, next) => {
     try {
@@ -83,8 +89,8 @@ module.exports.sendOtp = async (req, res) => {
             return res.redirect("/signup");
         }
 
-        if (!process.env.RESEND_API_KEY) {
-            console.error("RESEND_API_KEY environment variable is not set!");
+        if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+            console.error("GMAIL_USER or GMAIL_APP_PASSWORD environment variable is not set!");
             req.flash("error", "Email service is not configured. Please contact the admin.");
             return res.redirect("/signup");
         }
@@ -105,9 +111,9 @@ module.exports.sendOtp = async (req, res) => {
         const newOtp = new Otp({ email, otp: hashotp });
         await newOtp.save();
 
-        // Send email via Resend (HTTP-based, works on Render free)
-        const { error } = await resend.emails.send({
-            from: "StayV <onboarding@resend.dev>",
+        // Send email via Nodemailer + Gmail
+        await transporter.sendMail({
+            from: `"StayV" <${process.env.GMAIL_USER}>`,
             to: email,
             subject: "OTP Verification - StayV",
             html: `<div style="font-family:sans-serif;padding:20px;">
@@ -117,12 +123,6 @@ module.exports.sendOtp = async (req, res) => {
                 <p>This code expires in 5 minutes.</p>
             </div>`,
         });
-
-        if (error) {
-            console.error("Resend error:", error);
-            req.flash("error", "Failed to send OTP. Please try again.");
-            return res.redirect("/signup");
-        }
 
         req.flash("success", "OTP sent to your email. Please check your inbox.");
         req.session.save((err) => {
