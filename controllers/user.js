@@ -12,8 +12,8 @@ const transporter=nodemailer.createTransport({
     port: 587,
     secure:false,
     auth:{
-        user: env.GOOGLE_USER,
-         pass:env.GOOGLE_PASS,
+        user: process.env.GOOGLE_USER,
+         pass:process.env.GOOGLE_PASS,
     },
 
 });
