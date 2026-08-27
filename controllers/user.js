@@ -8,7 +8,6 @@ const bcrypt = require("bcrypt");
 
 
 const transporter = nodemailer.createTransport({
-    service: "gmail",
     host: "smtp.gmail.com",
     port: 587,
     secure: false,
@@ -21,7 +20,7 @@ const transporter = nodemailer.createTransport({
     tls: {
         rejectUnauthorized: false,
     },
-    connectionTimeout: 10000, // 10 seconds
+    connectionTimeout: 10000,
     greetingTimeout: 10000,
     socketTimeout: 10000,
 });
