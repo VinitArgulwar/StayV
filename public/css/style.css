@@ -310,6 +310,31 @@ footer {
     transform: scale(0.98);
 }
 
+/* OTP action buttons (Send OTP / Verify) */
+.btn-otp-action {
+    background-color: transparent !important;
+    border: 1.5px solid var(--brand-color) !important;
+    color: var(--brand-color) !important;
+    font-weight: 600 !important;
+    font-size: 0.82rem !important;
+    border-radius: 0.5rem !important;
+    padding: 0.45rem 1rem !important;
+    white-space: nowrap;
+    transition: all 0.2s ease !important;
+    margin-top: 1px;
+}
+
+.btn-otp-action:hover {
+    background-color: var(--brand-color) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(255, 56, 92, 0.25);
+}
+
+.btn-otp-action:active {
+    transform: scale(0.97);
+}
+
 .btn-dark-custom {
     background-color: #222222 !important;
     border-color: #222222 !important;

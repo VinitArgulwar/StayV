@@ -92,8 +92,6 @@ app.use((req, res, next) => {
 });
 
 async function main() {
-    console.log(process.env.ATLASDB_URL);
-console.log(typeof process.env.ATLASDB_URL);
     await mongoose.connect(dburl);
     console.log("Connected to MongoDB");
 }

@@ -21,7 +21,15 @@ const transporter = nodemailer.createTransport({
     tls: {
         rejectUnauthorized: false,
     },
+    connectionTimeout: 10000, // 10 seconds
+    greetingTimeout: 10000,
+    socketTimeout: 10000,
 });
+
+// Verify transporter on startup
+transporter.verify()
+    .then(() => console.log("SMTP transporter is ready"))
+    .catch((err) => console.error("SMTP transporter error:", err.message));
 
 module.exports.signup=async (req, res, next) => {
     try {
@@ -98,6 +106,13 @@ module.exports.sendOtp = async (req, res) => {
             return res.redirect("/signup");
         }
 
+        // Check if email credentials are configured
+        if (!process.env.GOOGLE_USER || !process.env.GOOGLE_PASS) {
+            console.error("GOOGLE_USER or GOOGLE_PASS environment variables are not set!");
+            req.flash("error", "Email service is not configured. Please contact the admin.");
+            return res.redirect("/signup");
+        }
+
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             req.flash("error", "User already exists with this email");
@@ -114,13 +129,20 @@ module.exports.sendOtp = async (req, res) => {
         const newOtp = new Otp({ email, otp: hashotp });
         await newOtp.save();
 
-        await transporter.sendMail({
+        // Send email with a hard timeout to prevent hanging
+        const sendMailPromise = transporter.sendMail({
             from: `"StayV" <${process.env.GOOGLE_USER}>`,
             to: email,
             subject: "OTP Verification",
             text: "Your OTP is: " + otp,
             html: "<b>Your OTP is: " + otp + "</b>",
         });
+
+        const timeoutPromise = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error("Email sending timed out")), 15000)
+        );
+
+        await Promise.race([sendMailPromise, timeoutPromise]);
 
         req.flash("success", "OTP sent to your email. Please check your inbox.");
         // Explicitly save session before redirect to prevent data loss
