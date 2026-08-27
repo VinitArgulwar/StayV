@@ -7,15 +7,20 @@ const Otp = require("../models/otpschema");
 const bcrypt = require("bcrypt");   
 
 
-const transporter=nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
+    service: "gmail",
     host: "smtp.gmail.com",
     port: 587,
-    secure:false,
-    auth:{
+    secure: false,
+    requireTLS: true,
+    family: 4,
+    auth: {
         user: process.env.GOOGLE_USER,
-         pass:process.env.GOOGLE_PASS,
+        pass: process.env.GOOGLE_PASS,
     },
-
+    tls: {
+        rejectUnauthorized: false,
+    },
 });
 
 module.exports.signup=async (req, res, next) => {
