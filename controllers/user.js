@@ -27,13 +27,19 @@ module.exports.signup=async (req, res, next) => {
     try {
         const { username, password } = req.body;
         const email = req.session.email; // Retrieve the email from the session
+
+        if (!email) {
+            req.flash("error", "Session expired. Please start the signup process again.");
+            return res.redirect("/signup");
+        }
+
         // Check if user already exists with username or email
         const existingUser = await User.findOne({
-            $or: [{ username }]
+            $or: [{ username }, { email }]
         });
        
         if (existingUser) {
-            req.flash("error", "User already exists");
+            req.flash("error", "User already exists with this username or email");
             return res.redirect("/login");
         }
         if(!req.session.otpVerified){
@@ -48,6 +54,10 @@ module.exports.signup=async (req, res, next) => {
        
         const registeredUser = await User.register(user, password);
 
+        // Clean up OTP session data
+        delete req.session.email;
+        delete req.session.otpVerified;
+
         req.login(registeredUser, (err) => {
             if (err) return next(err);
 
@@ -57,7 +67,7 @@ module.exports.signup=async (req, res, next) => {
 
     } catch (e) {
         req.flash("error", e.message || "Something went wrong");
-        res.redirect("/listings");
+        res.redirect("/signup");
     }
 };
 
@@ -83,6 +93,11 @@ module.exports.sendOtp = async (req, res) => {
     try {
         const { email } = req.body;
 
+        if (!email) {
+            req.flash("error", "Please enter an email address.");
+            return res.redirect("/signup");
+        }
+
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             req.flash("error", "User already exists with this email");
@@ -100,7 +115,7 @@ module.exports.sendOtp = async (req, res) => {
         await newOtp.save();
 
         await transporter.sendMail({
-            from: '"Tester team" <secureshare34@gmail.com>',
+            from: `"StayV" <${process.env.GOOGLE_USER}>`,
             to: email,
             subject: "OTP Verification",
             text: "Your OTP is: " + otp,
@@ -108,8 +123,15 @@ module.exports.sendOtp = async (req, res) => {
         });
 
         req.flash("success", "OTP sent to your email. Please check your inbox.");
-        return res.redirect("/signup");
+        // Explicitly save session before redirect to prevent data loss
+        req.session.save((err) => {
+            if (err) {
+                console.error("Session save error:", err);
+            }
+            return res.redirect("/signup");
+        });
     } catch (e) {
+        console.error("sendOtp error:", e);
         req.flash("error", e.message || "Something went wrong while sending OTP");
         return res.redirect("/signup");
     }
@@ -118,17 +140,22 @@ module.exports.sendOtp = async (req, res) => {
 module.exports.verifyOtp = async (req, res) => {
     try {
         const { otp } = req.body;
-        const { email } = req.session;
+        const email = req.session.email;
 
         if (!email) {
             req.flash("error", "Please request an OTP first.");
             return res.redirect("/signup");
         }
 
+        if (!otp) {
+            req.flash("error", "Please enter the OTP.");
+            return res.redirect("/signup");
+        }
+
         const existingOtp = await Otp.findOne({ email }).sort({ createdAt: -1 });
 
         if (!existingOtp) {
-            req.flash("error", "Invalid OTP. Please try again.");
+            req.flash("error", "OTP has expired or was not found. Please request a new one.");
             return res.redirect("/signup");
         }
 
@@ -144,11 +171,20 @@ module.exports.verifyOtp = async (req, res) => {
         }
 
         req.session.otpVerified = true;
+        // Clean up the used OTP
+        await Otp.deleteMany({ email });
+
         req.flash("success", "OTP verified successfully! Please complete your registration.");
-        return res.redirect("/signup");
+        // Explicitly save session before redirect to prevent data loss
+        req.session.save((err) => {
+            if (err) {
+                console.error("Session save error:", err);
+            }
+            return res.redirect("/signup");
+        });
     } catch (e) {
+        console.error("verifyOtp error:", e);
         req.flash("error", e.message || "Something went wrong while verifying OTP");
         return res.redirect("/signup");
     }
 };
-    
