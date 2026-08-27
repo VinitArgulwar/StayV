@@ -12,44 +12,16 @@
                 <p class="text-muted signup-subtext">Join StayV to explore and share beautiful places</p>
             </div>
             
-            <!-- Step 1: Send OTP -->
-            <form action="/signup/send-otp" method="POST" novalidate class="needs-validation">
+            <form action="/signup" method="POST" novalidate class="needs-validation">
                 <div class="mb-3">
                     <label for="email" class="form-label-custom">Email Address</label>
-                    <div class="d-flex align-items-start gap-2">
-                        <div class="input-group-custom flex-grow-1">
-                            <span class="input-icon"><i class="fa-solid fa-envelope"></i></span>
-                            <input name="email" type="email" class="form-control-custom" id="email" placeholder="you@example.com" required>
-                            <div class="invalid-feedback">Please enter a valid email address.</div>
-                        </div>
-                        <button class="btn btn-otp-action" type="submit">
-                            <i class="fa-solid fa-paper-plane me-1"></i>Send OTP
-                        </button>
+                    <div class="input-group-custom">
+                        <span class="input-icon"><i class="fa-solid fa-envelope"></i></span>
+                        <input name="email" type="email" class="form-control-custom" id="email" placeholder="you@example.com" required>
+                        <div class="invalid-feedback">Please enter a valid email address.</div>
                     </div>
                 </div>
-            </form>
 
-            <!-- Step 2: Verify OTP -->
-            <form action="/signup/verify-otp" method="POST" novalidate class="needs-validation">
-                <div class="mb-4">
-                    <label for="otp" class="form-label-custom">One-Time Password</label>
-                    <div class="d-flex align-items-start gap-2">
-                        <div class="input-group-custom flex-grow-1">
-                            <span class="input-icon"><i class="fa-solid fa-key"></i></span>
-                            <input name="otp" type="text" class="form-control-custom" id="otp" placeholder="e.g. 123456" required>
-                            <div class="invalid-feedback">Please enter the one-time password.</div>
-                        </div>
-                        <button class="btn btn-otp-action" type="submit">
-                            <i class="fa-solid fa-check me-1"></i>Verify
-                        </button>
-                    </div>
-                </div>
-            </form>
-
-            <hr class="my-3" style="border-color: rgba(0,0,0,0.1);">
-
-            <!-- Step 3: Complete Registration -->
-            <form action="/signup" method="POST" novalidate class="needs-validation">
                 <div class="mb-3">
                     <label for="username" class="form-label-custom">Username</label>
                     <div class="input-group-custom">

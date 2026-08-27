@@ -2,27 +2,10 @@ const Listing = require("../models/listing");
 const Review = require("../models/review");
 const ExpressError = require("../utils/ExpressError");
 const User=require("../models/users");
-const nodemailer = require("nodemailer");
-const Otp = require("../models/otpschema");
-const bcrypt = require("bcrypt");   
-
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
-    },
-});
 
 module.exports.signup=async (req, res, next) => {
     try {
-        const { username, password } = req.body;
-        const email = req.session.email; // Retrieve the email from the session
-
-        if (!email) {
-            req.flash("error", "Session expired. Please start the signup process again.");
-            return res.redirect("/signup");
-        }
+        const { username, email, password } = req.body;
 
         // Check if user already exists with username or email
         const existingUser = await User.findOne({
@@ -31,10 +14,6 @@ module.exports.signup=async (req, res, next) => {
        
         if (existingUser) {
             req.flash("error", "User already exists with this username or email");
-            return res.redirect("/login");
-        }
-        if(!req.session.otpVerified){
-            req.flash("error", "Please verify your OTP before signing up.");
             return res.redirect("/signup");
         }
 
@@ -44,10 +23,6 @@ module.exports.signup=async (req, res, next) => {
         });
        
         const registeredUser = await User.register(user, password);
-
-        // Clean up OTP session data
-        delete req.session.email;
-        delete req.session.otpVerified;
 
         req.login(registeredUser, (err) => {
             if (err) return next(err);
@@ -78,114 +53,4 @@ module.exports.logout= (req, res,next) => {
         req.flash("success", "You have been logged out!");
         res.redirect("/listings");
     });
-};
-
-module.exports.sendOtp = async (req, res) => {
-    try {
-        const { email } = req.body;
-
-        if (!email) {
-            req.flash("error", "Please enter an email address.");
-            return res.redirect("/signup");
-        }
-
-        if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-            console.error("GMAIL_USER or GMAIL_APP_PASSWORD environment variable is not set!");
-            req.flash("error", "Email service is not configured. Please contact the admin.");
-            return res.redirect("/signup");
-        }
-
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            req.flash("error", "User already exists with this email");
-            return res.redirect("/signup");
-        }
-
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
-        req.session.email = email;
-        req.session.otpVerified = false;
-
-        await Otp.deleteMany({ email });
-
-        const hashotp = await bcrypt.hash(otp, 10);
-        const newOtp = new Otp({ email, otp: hashotp });
-        await newOtp.save();
-
-        // Send email via Nodemailer + Gmail
-        await transporter.sendMail({
-            from: `"StayV" <${process.env.GMAIL_USER}>`,
-            to: email,
-            subject: "OTP Verification - StayV",
-            html: `<div style="font-family:sans-serif;padding:20px;">
-                <h2>StayV - Email Verification</h2>
-                <p>Your OTP is:</p>
-                <h1 style="letter-spacing:8px;color:#FF385C;">${otp}</h1>
-                <p>This code expires in 5 minutes.</p>
-            </div>`,
-        });
-
-        req.flash("success", "OTP sent to your email. Please check your inbox.");
-        req.session.save((err) => {
-            if (err) {
-                console.error("Session save error:", err);
-            }
-            return res.redirect("/signup");
-        });
-    } catch (e) {
-        console.error("sendOtp error:", e);
-        req.flash("error", e.message || "Something went wrong while sending OTP");
-        return res.redirect("/signup");
-    }
-};
-
-module.exports.verifyOtp = async (req, res) => {
-    try {
-        const { otp } = req.body;
-        const email = req.session.email;
-
-        if (!email) {
-            req.flash("error", "Please request an OTP first.");
-            return res.redirect("/signup");
-        }
-
-        if (!otp) {
-            req.flash("error", "Please enter the OTP.");
-            return res.redirect("/signup");
-        }
-
-        const existingOtp = await Otp.findOne({ email }).sort({ createdAt: -1 });
-
-        if (!existingOtp) {
-            req.flash("error", "OTP has expired or was not found. Please request a new one.");
-            return res.redirect("/signup");
-        }
-
-        const isOtpValid = await bcrypt.compare(otp, existingOtp.otp);
-        if (!isOtpValid) {
-            req.flash("error", "Invalid OTP. Please try again.");
-            return res.redirect("/signup");
-        }
-
-        if (existingOtp.createdAt.getTime() + 5 * 60 * 1000 < Date.now()) {
-            req.flash("error", "OTP has expired. Please request a new one.");
-            return res.redirect("/signup");
-        }
-
-        req.session.otpVerified = true;
-        // Clean up the used OTP
-        await Otp.deleteMany({ email });
-
-        req.flash("success", "OTP verified successfully! Please complete your registration.");
-        // Explicitly save session before redirect to prevent data loss
-        req.session.save((err) => {
-            if (err) {
-                console.error("Session save error:", err);
-            }
-            return res.redirect("/signup");
-        });
-    } catch (e) {
-        console.error("verifyOtp error:", e);
-        req.flash("error", e.message || "Something went wrong while verifying OTP");
-        return res.redirect("/signup");
-    }
 };
