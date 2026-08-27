@@ -21,6 +21,9 @@ router.post("/login",saveRedirectUrl, passport.authenticate("local", {
     failureRedirect: "/login"
 }),userController.login);
 
+router.post("/signup/send-otp", userController.sendOtp);
+router.post("/signup/verify-otp", userController.verifyOtp);
+
 router.get("/logout",userController.logout);
 
 module.exports = router;

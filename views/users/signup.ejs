@@ -12,17 +12,8 @@
                 <p class="text-muted signup-subtext">Join StayV to explore and share beautiful places</p>
             </div>
             
-            <form action="/signup" method="POST" novalidate class="needs-validation">
-                <!-- Username -->
-                <div class="mb-3">
-                    <label for="username" class="form-label-custom">Username</label>
-                    <div class="input-group-custom">
-                        <span class="input-icon"><i class="fa-solid fa-user"></i></span>
-                        <input name="username" type="text" class="form-control-custom" id="username" placeholder="e.g. wanderer44" required>
-                        <div class="invalid-feedback">Please choose a username.</div>
-                    </div>
-                </div>
-
+            <form action="/signup/send-otp" method="POST" novalidate class="needs-validation">
+                
                 <!-- Email -->
                 <div class="mb-3">
                     <label for="email" class="form-label-custom">Email Address</label>
@@ -30,6 +21,33 @@
                         <span class="input-icon"><i class="fa-solid fa-envelope"></i></span>
                         <input name="email" type="email" class="form-control-custom" id="email" placeholder="you@example.com" required>
                         <div class="invalid-feedback">Please enter a valid email address.</div>
+                    </div>
+                </div>
+                <button class="btn btn-brand py-2 btn-lg mb-3" type="submit">Send OTP</button>
+
+                </form>
+                <!---otp--->
+                <form action="/signup/verify-otp" method="POST" novalidate class="needs-validation">    
+                <div class="mb-3">
+                    <label for="otp" class="form-label-custom">One-Time Password</label>
+                    <div class="input-group-custom">
+                        <span class="input-icon"><i class="fa-solid fa-key"></i></span>
+                        <input name="otp" type="text" class="form-control-custom" id="otp" placeholder="e.g. 123456" required>
+                        <div class="invalid-feedback">Please enter the one-time password.</div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-brand py-2 btn-lg" type="submit">Verify</button>
+                </form>
+
+                <form action="/signup" method="POST" novalidate class="needs-validation mt-4">  
+                <!-- Username -->
+                <div class="mb-3">
+                    <label for="username" class="form-label-custom">Username</label>
+                    <div class="input-group-custom">
+                        <span class="input-icon"><i class="fa-solid fa-user"></i></span>
+                        <input name="username" type="text" class="form-control-custom" id="username" placeholder="e.g. wanderer44" required>
+                        <div class="invalid-feedback">Please choose a username.</div>
                     </div>
                 </div>
                 
