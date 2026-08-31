@@ -1,0 +1,186 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="admin-dashboard-container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <h2 class="fw-bold mb-1"><i class="fa-solid fa-shield-halved text-brand me-2"></i>Admin Dashboard</h2>
+            <p class="text-muted mb-0">Manage platform users, property hosts, and all listings</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="/listings/new" class="btn btn-brand btn-sm px-3"><i class="fa-solid fa-plus me-1"></i> Add New Listing</a>
+            <a href="/listings" class="btn btn-outline-dark btn-sm px-3"><i class="fa-solid fa-arrow-left me-1"></i> Back to Explore</a>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-xl-3 col-sm-6 col-12">
+            <div class="stat-card">
+                <div class="stat-icon bg-users"><i class="fa-solid fa-user-group"></i></div>
+                <div>
+                    <div class="stat-number"><%= userCount %></div>
+                    <div class="stat-label">Travelers</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 col-12">
+            <div class="stat-card">
+                <div class="stat-icon bg-managers"><i class="fa-solid fa-user-tie"></i></div>
+                <div>
+                    <div class="stat-number"><%= managerCount %></div>
+                    <div class="stat-label">Project Managers</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 col-12">
+            <div class="stat-card">
+                <div class="stat-icon bg-listings"><i class="fa-solid fa-house-chimney"></i></div>
+                <div>
+                    <div class="stat-number"><%= listingCount %></div>
+                    <div class="stat-label">Active Listings</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 col-12">
+            <div class="stat-card">
+                <div class="stat-icon bg-reviews"><i class="fa-solid fa-comments"></i></div>
+                <div>
+                    <div class="stat-number"><%= reviewCount %></div>
+                    <div class="stat-label">Total Reviews</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Users & Project Managers Section -->
+    <div class="dashboard-panel mb-5">
+        <div class="panel-header d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold mb-0"><i class="fa-solid fa-users me-2 text-brand"></i>All Accounts (<%= users.length %>)</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 custom-admin-table">
+                <thead class="table-light">
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Account ID</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (users.length === 0) { %>
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted">No users found.</td>
+                        </tr>
+                    <% } else { %>
+                        <% users.forEach(user => { %>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="user-avatar-circle">
+                                            <%= user.username.charAt(0).toUpperCase() %>
+                                        </div>
+                                        <div>
+                                            <span class="fw-semibold"><%= user.username %></span>
+                                            <% if (currentUser && currentUser._id.equals(user._id)) { %>
+                                                <span class="badge bg-secondary ms-1 small">You</span>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><%= user.email %></td>
+                                <td>
+                                    <% if (user.role === 'admin') { %>
+                                        <span class="badge badge-admin"><i class="fa-solid fa-shield me-1"></i>Admin</span>
+                                    <% } else if (user.role === 'project_manager' || user.role === 'host') { %>
+                                        <span class="badge badge-manager"><i class="fa-solid fa-user-tie me-1"></i>Project Manager</span>
+                                    <% } else { %>
+                                        <span class="badge badge-user"><i class="fa-solid fa-user me-1"></i>Traveler</span>
+                                    <% } %>
+                                </td>
+                                <td><code class="small text-muted"><%= user._id %></code></td>
+                                <td class="text-end">
+                                    <% if (currentUser && currentUser._id.equals(user._id)) { %>
+                                        <button class="btn btn-sm btn-outline-secondary disabled" title="Cannot delete self">Current User</button>
+                                    <% } else { %>
+                                        <form action="/admin/users/<%= user._id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('WARNING: Deleting <%= user.username %> will also delete all their listings and reviews. Continue?');">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <i class="fa-solid fa-trash me-1"></i> Delete User
+                                            </button>
+                                        </form>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Listings Management Section -->
+    <div class="dashboard-panel">
+        <div class="panel-header d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold mb-0"><i class="fa-solid fa-building me-2 text-brand"></i>All Listings (<%= listings.length %>)</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 custom-admin-table">
+                <thead class="table-light">
+                    <tr>
+                        <th>Listing</th>
+                        <th>Host / Owner</th>
+                        <th>Location</th>
+                        <th>Price / Night</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (listings.length === 0) { %>
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted">No listings found.</td>
+                        </tr>
+                    <% } else { %>
+                        <% listings.forEach(listing => { %>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <img src="<%= listing.image.url %>" class="admin-listing-thumb" alt="" onerror="this.src='https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60';">
+                                        <div>
+                                            <a href="/listings/<%= listing._id %>" class="fw-semibold text-dark text-decoration-none">
+                                                <%= listing.title %>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <% if (listing.owner) { %>
+                                        <span class="fw-medium"><%= listing.owner.username %></span>
+                                        <span class="text-muted small">(<%= listing.owner.role %>)</span>
+                                    <% } else { %>
+                                        <span class="text-muted">Unknown</span>
+                                    <% } %>
+                                </td>
+                                <td><%= listing.location %>, <%= listing.country %></td>
+                                <td><b>&#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : 'N/A' %></b></td>
+                                <td class="text-end">
+                                    <a href="/listings/<%= listing._id %>" class="btn btn-sm btn-outline-primary me-1" title="View Listing">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </a>
+                                    <a href="/listings/<%= listing._id %>/edit" class="btn btn-sm btn-outline-dark me-1" title="Edit Listing">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </a>
+                                    <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete listing \'<%= listing.title %>\'?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete Listing">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

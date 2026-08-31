@@ -706,3 +706,340 @@ footer {
 .listing-card-wrapper.hide-card {
     display: none !important;
 }
+
+/* =========================================
+   Role Badges (User, Host, Admin)
+   ========================================= */
+.badge-admin {
+    background-color: #fbe9e7 !important;
+    color: #d32f2f !important;
+    border: 1px solid #ffcdd2;
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    letter-spacing: 0.3px;
+}
+
+.badge-manager, .badge-host {
+    background-color: #e8f5e9 !important;
+    color: #2e7d32 !important;
+    border: 1px solid #c8e6c9;
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    letter-spacing: 0.3px;
+}
+
+.badge-user {
+    background-color: #e3f2fd !important;
+    color: #1976d2 !important;
+    border: 1px solid #bbdefb;
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    letter-spacing: 0.3px;
+}
+
+.pm-banner {
+    background-color: #f6fbf7;
+    border: 1px solid #d4edda;
+}
+
+.admin-nav-link {
+    background-color: #fff0f2;
+    color: var(--brand-color) !important;
+    border-radius: 8px;
+    padding: 0.35rem 0.85rem !important;
+    font-weight: 600 !important;
+    border: 1px solid #ffd0d8;
+    transition: all 0.2s ease;
+}
+
+.admin-nav-link:hover {
+    background-color: var(--brand-color);
+    color: #ffffff !important;
+}
+
+.add-listing-nav-link {
+    font-weight: 600 !important;
+    color: var(--brand-color) !important;
+}
+
+/* =========================================
+   Role Selector in Signup
+   ========================================= */
+.role-selector-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.role-card-option {
+    cursor: pointer;
+    margin-bottom: 0;
+}
+
+.role-radio-input {
+    display: none;
+}
+
+.role-card-content {
+    border: 1.5px solid var(--border-color);
+    border-radius: 10px;
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    transition: all 0.2s ease;
+    background-color: #fafafa;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.role-card-content .role-icon {
+    font-size: 1.3rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.35rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.role-card-content .role-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.2rem;
+}
+
+.role-card-content .role-desc {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    line-height: 1.2;
+}
+
+.role-card-option:hover .role-card-content {
+    border-color: var(--text-secondary);
+    transform: translateY(-2px);
+}
+
+.role-radio-input:checked + .role-card-content {
+    border-color: var(--brand-color);
+    background-color: #fff5f7;
+    box-shadow: 0 4px 12px rgba(255, 56, 92, 0.12);
+}
+
+.role-radio-input:checked + .role-card-content .role-icon {
+    color: var(--brand-color);
+    transform: scale(1.1);
+}
+
+.role-radio-input:checked + .role-card-content .role-title {
+    color: var(--brand-color);
+}
+
+@media (max-width: 576px) {
+    .role-selector-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================
+   Auth Tabs (Traveler vs Project Manager)
+   ========================================= */
+.auth-role-tabs {
+    display: flex;
+    background-color: #f5f5f5;
+    padding: 4px;
+    border-radius: 12px;
+    gap: 4px;
+}
+
+.auth-role-tab {
+    flex: 1;
+    text-align: center;
+    padding: 0.6rem 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: transparent;
+    border: none;
+    border-radius: 9px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-role-tab:hover {
+    color: var(--text-primary);
+}
+
+.auth-role-tab.active {
+    background-color: #ffffff;
+    color: var(--brand-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.auth-role-tab.active.pm-tab {
+    color: #222222;
+}
+
+.signup-header-accent.pm-accent {
+    background: linear-gradient(90deg, #1b5e20 0%, #43a047 100%);
+}
+
+.pm-badge-header {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.pm-features-box {
+    background-color: #f8faf9;
+    border: 1px dashed #c8e6c9;
+}
+
+/* =========================================
+   Host Review Notice
+   ========================================= */
+.host-review-notice {
+    background-color: #fff9e6;
+    border: 1px solid #ffe58f;
+    color: #874d00;
+    padding: 0.85rem 1.25rem;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 0.92rem;
+}
+
+/* =========================================
+   Admin Dashboard Styling
+   ========================================= */
+.stat-card {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.stat-icon {
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+}
+
+.stat-icon.bg-users {
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+
+.stat-icon.bg-managers, .stat-icon.bg-hosts {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.stat-icon.bg-listings {
+    background-color: #fff0f2;
+    color: var(--brand-color);
+}
+
+.stat-icon.bg-reviews {
+    background-color: #f3e5f5;
+    color: #7b1fa2;
+}
+
+.stat-number {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--text-primary);
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-top: 0.2rem;
+}
+
+.dashboard-panel {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+}
+
+.panel-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #ebebeb;
+    background-color: #fafafa;
+}
+
+.custom-admin-table th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    padding: 0.85rem 1.25rem;
+}
+
+.custom-admin-table td {
+    padding: 1rem 1.25rem;
+    font-size: 0.92rem;
+    border-color: #f0f0f0;
+}
+
+.user-avatar-circle {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.admin-listing-thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.review-card {
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background-color: #fafafa;
+    transition: all 0.2s ease;
+}
+
+.review-card:hover {
+    border-color: #cccccc;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}

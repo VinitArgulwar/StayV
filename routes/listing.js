@@ -11,7 +11,7 @@ const wrapAsync = require("../utils/wrapAsync");
 const ExpressError = require("../utils/ExpressError");
 const { listingSchema } = require("../schema");
 const flash = require("connect-flash");
-const { isLoggedIn, isOwner } = require("../middleware");    
+const { isLoggedIn, isOwner, isProjectManagerOrAdmin } = require("../middleware");    
 // Listing Validation
 const validateListing = (req, res, next) => {
     const { error } = listingSchema.validate(req.body);
@@ -23,14 +23,18 @@ const validateListing = (req, res, next) => {
 
     next();
 };
-router.get("/new", isLoggedIn,listingController.rendernewform);
+router.get("/new", isLoggedIn, isProjectManagerOrAdmin, listingController.rendernewform);
 
-router.route("/").get(wrapAsync(listingController.index))
-.post(isLoggedIn, validateListing,upload.single("listing[image]"), wrapAsync(listingController.createListing));
-router.route("/:id").get(wrapAsync(listingController.showListing)).put(isLoggedIn, isOwner,upload.single("listing[image]"), validateListing, wrapAsync(listingController.updateListing)).delete(isLoggedIn, isOwner, wrapAsync(listingController.destroyListing));
+router.route("/")
+    .get(wrapAsync(listingController.index))
+    .post(isLoggedIn, isProjectManagerOrAdmin, validateListing, upload.single("listing[image]"), wrapAsync(listingController.createListing));
 
+router.route("/:id")
+    .get(wrapAsync(listingController.showListing))
+    .put(isLoggedIn, isOwner, upload.single("listing[image]"), validateListing, wrapAsync(listingController.updateListing))
+    .delete(isLoggedIn, isOwner, wrapAsync(listingController.destroyListing));
 
-router.get("/:id/edit",isLoggedIn,isOwner, wrapAsync(listingController.editListing));
+router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingController.editListing));
 
 
 module.exports = router;

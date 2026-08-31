@@ -6,7 +6,7 @@ const Review = require("../models/review");
 const wrapAsync = require("../utils/wrapAsync");
 const ExpressError = require("../utils/ExpressError");
 const { reviewSchema } = require("../schema");
-const { isLoggedIn,isAuthor } = require("../middleware");
+const { isLoggedIn, isAuthor, canReview } = require("../middleware");
 const reviewcontroller = require("../controllers/reviews");
 const validateReview = (req, res, next) => {
     const { error } = reviewSchema.validate(req.body);
@@ -19,8 +19,8 @@ const validateReview = (req, res, next) => {
     next();
 };
 
-// Add Review
-router.post("/",isLoggedIn, validateReview, wrapAsync(reviewcontroller.createReview));
+// Add Review (Not allowed for host role)
+router.post("/", isLoggedIn, canReview, validateReview, wrapAsync(reviewcontroller.createReview));
 
 // Delete Review
 router.delete("/:reviewId", isLoggedIn, isAuthor, wrapAsync(reviewcontroller.deleteReview));

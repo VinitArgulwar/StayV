@@ -1,22 +1,31 @@
 const Listing = require("../models/listing");
 
-module.exports.index=async (req, res) => {
-    const alllistings = await Listing.find({});
+module.exports.index = async (req, res) => {
+    let filter = {};
+    if (req.user && req.user.role === "project_manager") {
+        filter = { owner: req.user._id };
+    }
+    const alllistings = await Listing.find(filter);
     res.render("listings/index.ejs", { alllistings });
 };
 
-module.exports.rendernewform= (req, res) => {
-    
+module.exports.rendernewform = (req, res) => {
     res.render("listings/new.ejs");
 };
 
-module.exports.showListing=async (req, res) => {
+module.exports.showListing = async (req, res) => {
     const { id } = req.params;
 
-    const listing = await Listing.findById(id).populate({path: "reviews", populate: { path: "author" },}).populate("owner") ;
+    const listing = await Listing.findById(id).populate({path: "reviews", populate: { path: "author" },}).populate("owner");
 
     if (!listing) {
         req.flash("error", "Listing not found");
+        return res.redirect("/listings");
+    }
+
+    // Project Manager can only view their own listings
+    if (req.user && req.user.role === "project_manager" && (!listing.owner || !listing.owner._id.equals(req.user._id))) {
+        req.flash("error", "Access restricted: You can only view listings that you manage.");
         return res.redirect("/listings");
     }
 
@@ -57,14 +66,15 @@ module.exports.destroyListing=async (req, res) => {
     res.redirect("/listings");
 };
 
-module.exports.updateListing=async (req, res) => {
+module.exports.updateListing = async (req, res) => {
     const { id } = req.params;
 
-    let listing=await Listing.findByIdAndUpdate(id, req.body.listing);
-    if(typeof req.file){
-     let url=req.file.path;
-    let filename=req.file.filename;
-      listing.image={filename,url};
+    let listing = await Listing.findByIdAndUpdate(id, req.body.listing);
+    if (typeof req.file !== "undefined") {
+        let url = req.file.path;
+        let filename = req.file.filename;
+        listing.image = { filename, url };
+        await listing.save();
     }
     req.flash("success", "Successfully updated the listing!");
     res.redirect(`/listings/${id}`);

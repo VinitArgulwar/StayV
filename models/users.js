@@ -6,7 +6,12 @@ const userSchema = new Schema({
     email: {
         type: String,
         required: true,
-        unique: true,
+        unique: true
+    },
+    role: {
+        type: String,
+        enum: ["user", "project_manager", "admin"],
+        default: "user"
     }
 });
 

@@ -2,40 +2,55 @@
 
 <div class="row mt-4 mb-5 justify-content-center">
     <div class="col-lg-5 col-md-8 col-sm-10 col-12">
-        <div class="form-card signup-card">
+        <div class="form-card signup-card" id="loginCard">
             <!-- Decorative Accent Header -->
-            <div class="signup-header-accent"></div>
+            <div class="signup-header-accent" id="loginAccent"></div>
             
-            <div class="text-center mb-4 mt-2">
-                <i class="fa-brands fa-airbnb signup-logo-icon"></i>
-                <h2 class="fw-bold mt-2 mb-1">Login</h2>
-                <p class="text-muted signup-subtext">Join StayV to explore and share beautiful places</p>
+            <div class="text-center mb-3 mt-2">
+                <i class="fa-brands fa-airbnb signup-logo-icon" id="loginIcon"></i>
+                <h2 class="fw-bold mt-2 mb-1" id="loginTitle">Welcome Back</h2>
+                <p class="text-muted signup-subtext" id="loginSubtitle">Log in to your StayV account</p>
+            </div>
+
+            <!-- Login Portal Switcher Tabs -->
+            <div class="auth-role-tabs mb-4">
+                <button type="button" class="auth-role-tab active" id="userTab" onclick="switchLoginMode('user')">
+                    <i class="fa-solid fa-user me-1"></i> Traveler Login
+                </button>
+                <button type="button" class="auth-role-tab" id="pmTab" onclick="switchLoginMode('pm')">
+                    <i class="fa-solid fa-user-tie me-1"></i> Project Manager
+                </button>
             </div>
             
             <form action="/login" method="POST" novalidate class="needs-validation">
                 <!-- Username -->
                 <div class="mb-3">
-                    <label for="username" class="form-label-custom">Username</label>
+                    <label for="username" class="form-label-custom" id="usernameLabel">Username</label>
                     <div class="input-group-custom">
-                        <span class="input-icon"><i class="fa-solid fa-user"></i></span>
-                        <input name="username" type="text" class="form-control-custom" id="username" placeholder="e.g. wanderer44" required>
-                        <div class="invalid-feedback">Please choose a username.</div>
+                        <span class="input-icon" id="usernameIcon"><i class="fa-solid fa-user"></i></span>
+                        <input name="username" type="text" class="form-control-custom" id="username" placeholder="Enter your username" required>
+                        <div class="invalid-feedback">Please enter your username.</div>
                     </div>
                 </div>
 
-                
                 <!-- Password -->
                 <div class="mb-4">
                     <label for="password" class="form-label-custom">Password</label>
                     <div class="input-group-custom">
                         <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
                         <input name="password" type="password" class="form-control-custom" id="password" placeholder="••••••••" required>
-                        <div class="invalid-feedback">Please enter a secure password.</div>
+                        <div class="invalid-feedback">Please enter your password.</div>
                     </div>
                 </div>
                 
                 <div class="d-grid gap-2">
-                    <button class="btn btn-brand py-2 btn-lg" type="submit">Login</button>
+                    <button class="btn btn-brand py-2 btn-lg" id="submitBtn" type="submit">Log In as Traveler</button>
+                    
+                    <div class="text-center mt-3" id="signupPrompt">
+                        <span class="text-muted small">Don't have an account?</span>
+                        <a href="/signup" id="signupLink" class="fw-bold text-decoration-none text-brand ms-1 small">Sign Up here</a>
+                    </div>
+                    
                     <a href="/listings" class="btn-link-back text-center mt-2 text-decoration-none">
                         <i class="fa-solid fa-arrow-left me-1"></i> Back to Explore
                     </a>
@@ -44,3 +59,53 @@
         </div>
     </div>
 </div>
+
+<script>
+function switchLoginMode(mode) {
+    const userTab = document.getElementById('userTab');
+    const pmTab = document.getElementById('pmTab');
+    const loginTitle = document.getElementById('loginTitle');
+    const loginSubtitle = document.getElementById('loginSubtitle');
+    const submitBtn = document.getElementById('submitBtn');
+    const signupLink = document.getElementById('signupLink');
+    const loginAccent = document.getElementById('loginAccent');
+    const usernameLabel = document.getElementById('usernameLabel');
+    const usernameIcon = document.getElementById('usernameIcon');
+
+    if (mode === 'pm') {
+        userTab.classList.remove('active');
+        pmTab.classList.add('active', 'pm-tab');
+        loginTitle.innerText = 'Project Manager Login';
+        loginSubtitle.innerText = 'Sign in to manage your property portfolio';
+        submitBtn.innerText = 'Log In as Project Manager';
+        submitBtn.className = 'btn btn-dark-custom py-2 btn-lg';
+        signupLink.innerText = 'Register as Project Manager';
+        signupLink.href = '/signup/pm';
+        signupLink.className = 'fw-bold text-decoration-none text-dark ms-1 small';
+        loginAccent.classList.add('pm-accent');
+        usernameLabel.innerText = 'Manager Username';
+        usernameIcon.innerHTML = '<i class="fa-solid fa-user-tie"></i>';
+    } else {
+        pmTab.classList.remove('active', 'pm-tab');
+        userTab.classList.add('active');
+        loginTitle.innerText = 'Traveler Login';
+        loginSubtitle.innerText = 'Log in to explore and review stays';
+        submitBtn.innerText = 'Log In as Traveler';
+        submitBtn.className = 'btn btn-brand py-2 btn-lg';
+        signupLink.innerText = 'Sign Up as Traveler';
+        signupLink.href = '/signup';
+        signupLink.className = 'fw-bold text-decoration-none text-brand ms-1 small';
+        loginAccent.classList.remove('pm-accent');
+        usernameLabel.innerText = 'Username';
+        usernameIcon.innerHTML = '<i class="fa-solid fa-user"></i>';
+    }
+}
+
+// Check URL query param for default PM tab
+window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('role') === 'pm' || params.get('role') === 'manager') {
+        switchLoginMode('pm');
+    }
+});
+</script>

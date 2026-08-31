@@ -10,7 +10,16 @@
             <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing image" onerror="this.src='https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60';">
             
             <div class="card-body show-body">
-                <p class="owner-info">Hosted by a StayV Host</p>
+                <div class="owner-info d-flex align-items-center justify-content-between">
+                    <div>
+                        <span>Managed by <b><%= listing.owner ? listing.owner.username : 'StayV Host' %></b></span>
+                        <% if (listing.owner && listing.owner.role === 'admin') { %>
+                            <span class="badge badge-admin ms-2"><i class="fa-solid fa-shield me-1"></i>Admin</span>
+                        <% } else if (listing.owner && (listing.owner.role === 'project_manager' || listing.owner.role === 'host')) { %>
+                            <span class="badge badge-manager ms-2"><i class="fa-solid fa-user-tie me-1"></i>Project Manager</span>
+                        <% } %>
+                    </div>
+                </div>
                 
                 <p class="show-desc"><%= listing.description %></p>
                 
@@ -30,71 +39,92 @@
                 </div>
             </div>
         </div>
-<% if (currentUser && listing.owner && currentUser._id.equals(listing.owner._id)) { %>        <div class="d-flex gap-3 mt-3 mb-5">
-            <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark-custom px-4">Edit Listing</a>
-            <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST" class="d-inline">
-                <button type="submit" class="btn btn-delete px-4">Delete Listing</button>
-            </form>
-        </div>
-    <%}%>
+
+        <% if (currentUser && (currentUser.role === 'admin' || (listing.owner && currentUser._id.equals(listing.owner._id)))) { %>
+            <div class="d-flex gap-3 mt-3 mb-5 align-items-center">
+                <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark-custom px-4">Edit Listing</a>
+                <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this listing?');">
+                    <button type="submit" class="btn btn-delete px-4">Delete Listing</button>
+                </form>
+                <% if (currentUser.role === 'admin' && !(listing.owner && currentUser._id.equals(listing.owner._id))) { %>
+                    <span class="text-muted small"><i class="fa-solid fa-shield-halved text-danger me-1"></i>Admin Override</span>
+                <% } %>
+            </div>
+        <% } %>
     </div>
 </div>
 
 <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12">
-    <%if(currentUser){ %>
-    <h4>Leave a Review</h4>
-    <hr>
-
-    <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
-
-    <label for="body">Review</label>
-<textarea
-    name="review[body]"
-    id="body"
-    class="form-control mb-3"
-    rows="3"
-    required
-></textarea>
-    <div class="invalid-feedback">Please enter a review.</div>
-    <label for="rating">Rating</label>
-    <select
-        name="review[rating]"
-        id="rating"
-        class="form-select mb-3"
-        required
-    >
-        <option value="5">5 (Excellent)</option>
-        <option value="4">4 (Very Good)</option>
-        <option value="3">3 (Good)</option>
-        <option value="2">2 (Fair)</option>
-        <option value="1">1 (Poor)</option>
-    </select>
-
-    <button class="btn btn-brand">Submit Review</button>
-</form>
-<%}%>
-<hr>
-<h4>Reviews</h4>
-    <hr>
-    <% if (listing.reviews.length === 0) { %>
-        <p>No reviews yet. Be the first to leave a review!</p>
-    <% } else { %>
-        <% listing.reviews.forEach(review => { %>
-            <div class="card mb-3">
-                <div class="card-body">
-                    <p><strong>Author:</strong> <%= review.author.username %></p>
-                    <p><strong>Rating:</strong> <%= review.rating %> / 5</p>
-                    <p><strong>Review:</strong> <%= review.body %></p>
-                </div>
-                <%if(currentUser && review.author && currentUser._id.equals(review.author._id)) { %>    
-                <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST" class="d-inline">
-                    <button type="submit" class="btn btn-delete">Delete Review</button>
-                </form>
-                <% } %>
+    <% if (currentUser) { %>
+        <% if (currentUser.role === 'project_manager' || currentUser.role === 'host') { %>
+            <div class="host-review-notice mb-4">
+                <i class="fa-solid fa-circle-info me-2 text-warning fs-5"></i>
+                <span>You are signed in as a <b>Project Manager</b>. Project Managers are not permitted to submit reviews.</span>
             </div>
+        <% } else { %>
+            <h4>Leave a Review</h4>
+            <hr>
 
-        <% }) %>
+            <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
+                <div class="mb-3">
+                    <label for="rating" class="form-label-custom">Rating</label>
+                    <select name="review[rating]" id="rating" class="form-select" required>
+                        <option value="5">5 ★ (Excellent)</option>
+                        <option value="4">4 ★ (Very Good)</option>
+                        <option value="3">3 ★ (Good)</option>
+                        <option value="2">2 ★ (Fair)</option>
+                        <option value="1">1 ★ (Poor)</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="body" class="form-label-custom">Review</label>
+                    <textarea name="review[body]" id="body" class="form-control" rows="3" placeholder="Share details of your stay..." required></textarea>
+                    <div class="invalid-feedback">Please enter a review.</div>
+                </div>
+
+                <button class="btn btn-brand">Submit Review</button>
+            </form>
+        <% } %>
+    <% } else { %>
+        <div class="p-3 bg-light rounded text-center mb-4">
+            <p class="mb-2">Want to leave a review?</p>
+            <a href="/login" class="btn btn-sm btn-outline-dark">Log In to Review</a>
+        </div>
     <% } %>
 
+    <hr class="mt-4">
+    <h4 class="mb-3">All Reviews</h4>
+    
+    <% if (!listing.reviews || listing.reviews.length === 0) { %>
+        <p class="text-muted">No reviews yet. Be the first traveler to leave a review!</p>
+    <% } else { %>
+        <div class="row">
+            <% listing.reviews.forEach(review => { %>
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="card review-card h-100 p-3">
+                        <div class="card-body p-0">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h6 class="fw-bold mb-0"><%= review.author ? review.author.username : 'Anonymous' %></h6>
+                                    <span class="text-warning small">
+                                        <% for(let i=0; i<review.rating; i++) { %>★<% } %><% for(let i=review.rating; i<5; i++) { %>☆<% } %>
+                                    </span>
+                                </div>
+                                <% if (currentUser && (currentUser.role === 'admin' || (review.author && currentUser._id.equals(review.author._id)))) { %>    
+                                    <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Delete this review?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger p-1 px-2" title="Delete Review">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </button>
+                                    </form>
+                                <% } %>
+                            </div>
+                            <p class="card-text text-secondary mb-0"><%= review.body %></p>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    <% } %>
 </div>
 

@@ -1,0 +1,84 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="row mt-4 mb-5 justify-content-center">
+    <div class="col-lg-5 col-md-8 col-sm-10 col-12">
+        <div class="form-card signup-card">
+            <!-- Decorative Accent Header -->
+            <div class="signup-header-accent pm-accent"></div>
+            
+            <div class="text-center mb-3 mt-2">
+                <div class="pm-badge-header d-inline-block px-3 py-1 rounded-pill mb-2">
+                    <i class="fa-solid fa-briefcase text-success me-1"></i> Partner Portal
+                </div>
+                <h2 class="fw-bold mt-1 mb-1">Project Manager Register</h2>
+                <p class="text-muted signup-subtext">Join StayV as a Property / Project Manager to list and manage stays</p>
+            </div>
+
+            <!-- Role Switch Tabs -->
+            <div class="auth-role-tabs mb-4">
+                <a href="/signup" class="auth-role-tab">
+                    <i class="fa-solid fa-user me-1"></i> Traveler
+                </a>
+                <a href="/signup/pm" class="auth-role-tab active pm-tab">
+                    <i class="fa-solid fa-user-tie me-1"></i> Project Manager
+                </a>
+            </div>
+            
+            <form action="/signup" method="POST" novalidate class="needs-validation">
+                <input type="hidden" name="role" value="project_manager">
+
+                <!-- Username -->
+                <div class="mb-3">
+                    <label for="username" class="form-label-custom">Manager Username</label>
+                    <div class="input-group-custom">
+                        <span class="input-icon"><i class="fa-solid fa-user-tie"></i></span>
+                        <input name="username" type="text" class="form-control-custom" id="username" placeholder="e.g. premier_manager" required>
+                        <div class="invalid-feedback">Please choose a manager username.</div>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3">
+                    <label for="email" class="form-label-custom">Business Email</label>
+                    <div class="input-group-custom">
+                        <span class="input-icon"><i class="fa-solid fa-envelope"></i></span>
+                        <input name="email" type="email" class="form-control-custom" id="email" placeholder="manager@stays.com" required>
+                        <div class="invalid-feedback">Please enter a valid business email address.</div>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="mb-4">
+                    <label for="password" class="form-label-custom">Password</label>
+                    <div class="input-group-custom">
+                        <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                        <input name="password" type="password" class="form-control-custom" id="password" placeholder="••••••••" required>
+                        <div class="invalid-feedback">Please enter a secure password.</div>
+                    </div>
+                </div>
+
+                <div class="pm-features-box mb-4 p-3 rounded">
+                    <small class="text-muted d-block mb-1 fw-bold"><i class="fa-solid fa-circle-check text-success me-1"></i> Project Manager Privileges:</small>
+                    <ul class="text-muted small mb-0 ps-3">
+                        <li>Create and publish unlimited property listings</li>
+                        <li>Dedicated dashboard viewing only your managed stays</li>
+                        <li>Full control over your property pricing and details</li>
+                    </ul>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button class="btn btn-dark-custom py-2 btn-lg" type="submit">
+                        <i class="fa-solid fa-user-tie me-1"></i> Register as Project Manager
+                    </button>
+                    <div class="text-center mt-3">
+                        <span class="text-muted small">Already a registered manager?</span>
+                        <a href="/login?role=pm" class="fw-bold text-decoration-none text-dark ms-1 small">Log In here</a>
+                    </div>
+                    <a href="/listings" class="btn-link-back text-center mt-2 text-decoration-none">
+                        <i class="fa-solid fa-arrow-left me-1"></i> Back to Explore
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
