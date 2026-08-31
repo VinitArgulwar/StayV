@@ -16,14 +16,6 @@ const userSchema = new Schema({
 });
 
 userSchema.plugin(passportLocalMongoose, {
-    findByUsername: (model, credentials) => {
-        // Allow logging in with either username or email
-        return model.findOne({
-            $or: [
-                { username: credentials.username },
-                { email: credentials.username }
-            ]
-        });
-    }
+    usernameQueryFields: ["email"]
 });
 module.exports = mongoose.model("User", userSchema);
