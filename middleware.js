@@ -3,7 +3,9 @@ const Review = require("./models/review");
 
 const isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
-        req.session.redirectUrl = req.originalUrl;
+        if (req.originalUrl && !req.originalUrl.includes("/login") && !req.originalUrl.includes("/signup")) {
+            req.session.redirectUrl = req.originalUrl;
+        }
         req.flash("error", "You must be signed in!");
         return res.redirect("/login");
     }
@@ -13,6 +15,7 @@ const isLoggedIn = (req, res, next) => {
 const saveRedirectUrl = (req, res, next) => {
     if (req.session.redirectUrl) {
         res.locals.redirectUrl = req.session.redirectUrl;
+        delete req.session.redirectUrl;
     }
     next();
 };

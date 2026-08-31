@@ -23,13 +23,13 @@
             </div>
             
             <form action="/login" method="POST" novalidate class="needs-validation">
-                <!-- Username -->
+                <!-- Username or Email -->
                 <div class="mb-3">
-                    <label for="username" class="form-label-custom" id="usernameLabel">Username</label>
+                    <label for="username" class="form-label-custom" id="usernameLabel">Username or Email</label>
                     <div class="input-group-custom">
                         <span class="input-icon" id="usernameIcon"><i class="fa-solid fa-user"></i></span>
-                        <input name="username" type="text" class="form-control-custom" id="username" placeholder="Enter your username" required>
-                        <div class="invalid-feedback">Please enter your username.</div>
+                        <input name="username" type="text" class="form-control-custom" id="username" placeholder="Enter your username or email" required>
+                        <div class="invalid-feedback">Please enter your username or email.</div>
                     </div>
                 </div>
 
@@ -71,6 +71,7 @@ function switchLoginMode(mode) {
     const loginAccent = document.getElementById('loginAccent');
     const usernameLabel = document.getElementById('usernameLabel');
     const usernameIcon = document.getElementById('usernameIcon');
+    const usernameInput = document.getElementById('username');
 
     if (mode === 'pm') {
         userTab.classList.remove('active');
@@ -83,7 +84,8 @@ function switchLoginMode(mode) {
         signupLink.href = '/signup/pm';
         signupLink.className = 'fw-bold text-decoration-none text-dark ms-1 small';
         loginAccent.classList.add('pm-accent');
-        usernameLabel.innerText = 'Manager Username';
+        usernameLabel.innerText = 'Manager Username or Email';
+        usernameInput.placeholder = 'Enter your username or email';
         usernameIcon.innerHTML = '<i class="fa-solid fa-user-tie"></i>';
     } else {
         pmTab.classList.remove('active', 'pm-tab');
@@ -96,7 +98,8 @@ function switchLoginMode(mode) {
         signupLink.href = '/signup';
         signupLink.className = 'fw-bold text-decoration-none text-brand ms-1 small';
         loginAccent.classList.remove('pm-accent');
-        usernameLabel.innerText = 'Username';
+        usernameLabel.innerText = 'Username or Email';
+        usernameInput.placeholder = 'Enter your username or email';
         usernameIcon.innerHTML = '<i class="fa-solid fa-user"></i>';
     }
 }

@@ -10,16 +10,18 @@
             <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing image" onerror="this.src='https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60';">
             
             <div class="card-body show-body">
-                <div class="owner-info d-flex align-items-center justify-content-between">
-                    <div>
-                        <span>Managed by <b><%= listing.owner ? listing.owner.username : 'StayV Host' %></b></span>
-                        <% if (listing.owner && listing.owner.role === 'admin') { %>
-                            <span class="badge badge-admin ms-2"><i class="fa-solid fa-shield me-1"></i>Admin</span>
-                        <% } else if (listing.owner && (listing.owner.role === 'project_manager' || listing.owner.role === 'host')) { %>
-                            <span class="badge badge-manager ms-2"><i class="fa-solid fa-user-tie me-1"></i>Project Manager</span>
-                        <% } %>
+                <% if (currentUser && (currentUser.role === 'admin' || (listing.owner && currentUser._id.equals(listing.owner._id)))) { %>
+                    <div class="owner-info d-flex align-items-center justify-content-between mb-3">
+                        <div>
+                            <span class="text-muted small">Managed by <b><%= listing.owner ? listing.owner.username : 'StayV Host' %></b></span>
+                            <% if (listing.owner && listing.owner.role === 'admin') { %>
+                                <span class="badge badge-admin ms-2"><i class="fa-solid fa-shield me-1"></i>Admin</span>
+                            <% } else if (listing.owner && (listing.owner.role === 'project_manager' || listing.owner.role === 'host')) { %>
+                                <span class="badge badge-manager ms-2"><i class="fa-solid fa-user-tie me-1"></i>Project Manager</span>
+                            <% } %>
+                        </div>
                     </div>
-                </div>
+                <% } %>
                 
                 <p class="show-desc"><%= listing.description %></p>
                 

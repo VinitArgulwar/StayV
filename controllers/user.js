@@ -48,7 +48,11 @@ module.exports.signup = async (req, res, next) => {
 
 module.exports.login = async (req, res) => {
     req.flash("success", `Welcome back, ${req.user.username}!`);
-    res.redirect(res.locals.redirectUrl || "/listings");
+    let redirectUrl = res.locals.redirectUrl || "/listings";
+    if (typeof redirectUrl !== "string" || redirectUrl.includes("/login") || redirectUrl.includes("/signup")) {
+        redirectUrl = "/listings";
+    }
+    res.redirect(redirectUrl);
 };
 
 module.exports.logout = (req, res, next) => {
