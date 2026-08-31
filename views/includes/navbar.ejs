@@ -26,7 +26,9 @@
         <% } %>
 
         <% if (!currentUser) { %>
-          <a class="nav-link text-secondary me-2" href="/signup/pm"><i class="fa-solid fa-briefcase me-1"></i> Become a PM</a>
+          <a class="nav-link btn-become-pm me-2" href="/signup/pm">
+            <i class="fa-solid fa-user-tie me-1 text-success"></i> Become a Project Manager
+          </a>
           <a class="nav-link" href="/login"><b>Login</b></a>
           <a class="btn btn-brand btn-sm px-3 ms-2 text-white" href="/signup"><b>Sign Up</b></a>
         <% } else { %>
